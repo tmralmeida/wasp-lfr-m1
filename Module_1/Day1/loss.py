@@ -49,21 +49,20 @@ class cNceLoss(object):
     """
     def __init__(self, lambda_):
         self.lambda_ = lambda_
-    
-    def cmpt_log_phi(self,inp):
-        inp = inp.unsqueeze(2)
-        log_phi = -0.5 * inp.permute(0,2,1) @ self.lambda_ @ inp
-        return log_phi.squeeze(-1).squeeze(-1)
+        _, neg_log_d = np.linalg.slogdet(self.lambda_.detach().numpy())
+        self.c = 0.5 * 28**2 * np.log(2*np.pi) - 0.5 * neg_log_d
+        self.mask = get_mask(28)
     
     def cmpt_g(self, xt, yt):
-        #return self.cmpt_log_phi(xt) - self.cmpt_log_phi(yt)  
-        return self.cmpt_log_phi(yt) - self.cmpt_log_phi(xt) # code from authors
-        
+        log_phi_xt = cmpt_logpm(xt,self.lambda_,self.c, self.mask)
+        log_phi_yt = cmpt_logpm(yt,self.lambda_,self.c, self.mask)
+        return log_phi_yt - log_phi_xt 
+
     def __call__(self, xt, yt):
         k = len(yt)
         loss = 0
         for i in range(k):
             gxy = self.cmpt_g(xt, yt[i])
             #loss += (gxy + torch.log(1 + torch.exp(gxy))).mean() # add stabilization
-            loss =  (torch.log(1 + torch.exp(gxy))).mean() # paper 
-        return  loss * 2
+            loss +=  (-gxy - torch.log(1 + torch.exp(gxy))) # paper 
+        return  loss.mean()

@@ -81,6 +81,7 @@ get_precision_matrices.ipynb
 sampling_pn.ipynb
 cNCE.ipynb
 cNCE_result.ipynb
+try.ipynb
 *.npy
 
 # models

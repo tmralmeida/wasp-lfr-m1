@@ -27,7 +27,7 @@ class cNCENoisyMnist(object):
     """
     def __init__(self, xs_train, k):
         self.train_ds = xs_train
-        self.cov = covar = torch.from_numpy(np.cov(xs_train.reshape(28**2,xs_train.shape[0]))) #torch.from_numpy(np.diag(xs_train.var(axis=0) * 2)) 
+        self.cov = covar = torch.from_numpy(np.diag(xs_train.var(axis=0)) * 2) 
         self.n_imgs = xs_train.shape[0]
         self.k = k
         

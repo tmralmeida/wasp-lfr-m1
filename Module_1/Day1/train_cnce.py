@@ -37,7 +37,7 @@ criterion = cNceLoss(prec_mat_opt)
 
 # Main loop
 for iter_, (mnist_batch, noise_batch) in enumerate(train_loader):
-    if iter_ == args.iterations: # 60
+    if iter_ > args.iterations: 
         break
     optim.zero_grad()
     
