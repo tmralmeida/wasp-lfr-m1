@@ -9,7 +9,7 @@ from tqdm import tqdm
 
 args = get_arguments()
 
-img_file = "train-images-idx3-ubyte"
+img_file = "data/train-images-idx3-ubyte"
 
 # Get training data and preprocess data
 x_train = parsing_file(img_file)
