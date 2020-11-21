@@ -64,7 +64,7 @@ def get_mask(s):
     up_down_diag = np.ones(N-3)
     diagonals = [main_diag,side_diag,side_diag,up_down_diag,up_down_diag]
     laplacian = sp.diags(diagonals, [0, -1, 1,nx,-nx], format="csr")
-    return laplacian.toarray()
+    return torch.tensor(laplacian.toarray())
 
 def cmpt_logpn(inp, mean, cov):
     """ Compute log pn for NCE
@@ -75,15 +75,16 @@ def cmpt_logpn(inp, mean, cov):
     """
     return torch.tensor(multivariate_normal.logpdf(inp,mean = mean, cov = cov), dtype = torch.float64)
 
-def cmpt_logpm(inp, lambda_, c_):
+def cmpt_logpm(inp, lambda_, c_, mask):
     """ Compute log pn for NCE
     inputs:
         - data (inp)
         - precision matrix (lambda_)
         - normalizer (c_)
     """
+    lambda_masked = lambda_ * mask
     inp = inp.unsqueeze(2)
-    log_pm = -0.5 * inp.permute(0,2,1) @ lambda_ @ inp - c_
+    log_pm = -0.5 * inp.permute(0,2,1) @ lambda_masked @ inp - c_
     return log_pm.squeeze(-1).squeeze(-1)
 
 

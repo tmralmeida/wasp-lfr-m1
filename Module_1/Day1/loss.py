@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from lib import cmpt_logpn, cmpt_logpm
+from lib import cmpt_logpn, cmpt_logpm, get_mask
 
 
 class NceLoss(object):
@@ -20,12 +20,15 @@ class NceLoss(object):
         self.mean = p_n["mean"]
         self.cov = p_n["cov"]
         self.niu = niu
+        self.mask_prec = get_mask(28)
 
     def cmpt_gs(self, xt, yt):
         """ Computes h(yt;theta) and h(xt;theta)
         """
-        gxt = cmpt_logpm(xt,self.lambda_, self.c_) - cmpt_logpn(xt, self.mean, self.cov)
-        gyt = cmpt_logpm(yt, self.lambda_, self.c_) - cmpt_logpn(yt, self.mean, self.cov)
+        gxt = cmpt_logpm(xt,self.lambda_, self.c_, self.mask_prec) \
+            - cmpt_logpn(xt, self.mean, self.cov)
+        gyt = cmpt_logpm(yt, self.lambda_, self.c_, self.mask_prec) \
+            - cmpt_logpn(yt, self.mean, self.cov)
         return gxt, gyt
 
     def __call__(self, xt, yt):
