@@ -6,7 +6,6 @@ from loss import cNceLoss
 from dataset import cNCENoisyMnist
 from tqdm import tqdm
 
-NN = 60000
 
 args = get_arguments()
 
@@ -17,7 +16,6 @@ x_train = parsing_file(img_file)
 xs_train,_ = pre_process(x_train)
 
 ds = cNCENoisyMnist(xs_train, 
-                    NN,
                     args.k)
 
 # Get precision matrices
