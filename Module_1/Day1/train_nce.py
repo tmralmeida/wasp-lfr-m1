@@ -55,7 +55,7 @@ criterion = NceLoss(p_theta,p_n)
 
 # Main loop
 for iter_, (mnist_batch, noise_batch) in enumerate(train_loader):
-    if iter_ == args.iterations:
+    if iter_ > args.iterations:
         break
     optim.zero_grad()
     
