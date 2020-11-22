@@ -27,7 +27,8 @@ class cNCENoisyMnist(object):
     """
     def __init__(self, xs_train, k):
         self.train_ds = xs_train
-        self.cov = covar = torch.from_numpy(np.diag(xs_train.var(axis=0)) * 2) 
+        #self.cov = torch.from_numpy(np.cov(xs_train.reshape(28**2,xs_train.shape[0]))) loss = 0
+        self.cov = torch.from_numpy(np.diag(xs_train.var(axis=0)))
         self.n_imgs = xs_train.shape[0]
         self.k = k
         
@@ -36,7 +37,7 @@ class cNCENoisyMnist(object):
         xt = torch.from_numpy(self.train_ds[idx])
         sample = [xt]
         noisy_samples = []
-        noisy_dist =torch.distributions.multivariate_normal.MultivariateNormal(xt, self.cov)
+        noisy_dist = torch.distributions.multivariate_normal.MultivariateNormal(xt, self.cov)
         for n in range(self.k):
             noisy_samples.append(noisy_dist.sample())
         sample.append(noisy_samples)
