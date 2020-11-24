@@ -19,7 +19,7 @@ ds = cNCENoisyMnist(xs_train,
                     args.k)
 
 # Get precision matrices
-guess_1 = np.diag(1 / (xs_train.var(axis=0) * 2))
+guess_1 = np.diag(1 / (xs_train.var(axis=0)))
 prec_mat = torch.tensor(guess_1.copy())
 
 
