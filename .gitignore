@@ -82,7 +82,7 @@ sampling_pn.ipynb
 cNCE.ipynb
 cNCE_result.ipynb
 try.ipynb
-*.npy
+*.gz
 
 # models
 *.pth
