@@ -76,5 +76,5 @@ print("c", c_opt.detach())
 
 
 
-np.save("precision_matrix_mask.npy", prec_mat_opt.detach())
-np.save("normalizer_mask.npy", c_opt.detach())
+np.save("NCE_results/precision_matrix_mask.npy", prec_mat_opt.detach())
+np.save("NCE_results/normalizer_mask.npy", c_opt.detach())
