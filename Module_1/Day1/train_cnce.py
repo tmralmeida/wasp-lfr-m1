@@ -4,8 +4,7 @@ from torch.utils.data import DataLoader
 from lib import *
 from loss import cNceLoss
 from dataset import cNCENoisyMnist
-from tqdm import tqdm
-
+from itertools import cycle
 
 args = get_arguments()
 
@@ -36,7 +35,7 @@ optim = torch.optim.SGD([prec_mat_opt], lr = args.learning_rate) # optimizer (lr
 criterion = cNceLoss(prec_mat_opt)
 
 # Main loop
-for iter_, (mnist_batch, noise_batch) in enumerate(train_loader):
+for iter_, (mnist_batch, noise_batch) in enumerate(cycle(train_loader)):
     if iter_ > args.iterations: 
         break
     optim.zero_grad()

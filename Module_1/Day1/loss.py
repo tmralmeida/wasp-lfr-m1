@@ -50,33 +50,23 @@ class cNceLoss(object):
     def __init__(self, lambda_):
         self.lambda_ = lambda_
         self.mask = get_mask(28)
+        _, neg_log_d = np.linalg.slogdet(self.lambda_.detach().numpy())
+        self.c = 0.5 * 28**2 * np.log(2*np.pi) - 0.5 * neg_log_d
     
     def cmpt_g(self, xt, yt):
-        _, neg_log_d = np.linalg.slogdet(self.lambda_.detach().numpy())
-        c = 0.5 * 28**2 * np.log(2*np.pi) - 0.5 * neg_log_d
-        log_phi_xt = cmpt_logpm(xt,self.lambda_,c, self.mask)
-        log_phi_yt = cmpt_logpm(yt,self.lambda_,c, self.mask)
-        # Slides:
+        log_phi_xt = cmpt_logpm(xt,self.lambda_,self.c, self.mask)
+        log_phi_yt = cmpt_logpm(yt,self.lambda_,self.c, self.mask)
         st = torch.stack((log_phi_xt, log_phi_yt), dim = 1)
         return log_phi_xt, st
-        # return log_phi_yt - log_phi_xt 
 
-    # Paper
-    # def __call__(self, xt, yt):
-    #     k = len(yt)
-    #     loss = 0
-    #     for i in range(k):
-    #         gxy = self.cmpt_g(xt, yt[i])
-    #         loss +=  (-gxy + torch.log(1 + torch.exp(gxy))).mean()
-    #     return  loss
-    
-    # Slides
+
     def __call__(self, xt, yt):
         k = len(yt)
         loss = 0
         for i in range(k):
             log_phi_xt, st = self.cmpt_g(xt, yt[i])
-            loss += (log_phi_xt - torch.logsumexp(st, dim = 1)).mean()
+            loss = log_phi_xt - torch.logsumexp(st, dim = 1)
+        loss = loss.mean()
         return  -loss
         
     
