@@ -13,7 +13,7 @@ args = get_arguments()
 train_tfms = get_transforms()
 
 # Get original dataset
-ds = torchvision.datasets.CIFAR10(root = "data/", 
+ds = torchvision.datasets.CIFAR10(root = "../data/", 
                                   train = True, 
                                   transform  = train_tfms, 
                                   target_transform = None, 
