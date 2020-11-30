@@ -82,6 +82,7 @@ sampling_pn.ipynb
 cNCE.ipynb
 try.ipynb
 add_notebooks/
+Module_2/
 *.gz
 
 # models
