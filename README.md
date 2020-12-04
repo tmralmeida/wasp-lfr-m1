@@ -1,2 +1,2 @@
-# wasp-lfr
-Code for Learning Features Representation WASP course.
+# wasp-lfr-m1
+Code for Learning Features Representation WASP course module 1.
